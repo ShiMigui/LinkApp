@@ -1,12 +1,11 @@
-const { JSDOM } = require("jsdom");
+const { encoding, dBuildName } = require("../config.json");
 const sass = require("sass");
 const path = require("path");
 const fs = require("fs");
-const encoding = "utf-8";
 
-const root = path.join(__dirname, "..", "..", "..");
+const root = path.join(__dirname, "..", "..");
 const dApp = path.join(root, "app");
-const dBuild = path.join(root, "build");
+const dBuild = path.join(root, dBuildName);
 
 function fCreate(fName = "", fDir = dBuild, fContent = "") {
     try {
@@ -19,55 +18,9 @@ function fCreate(fName = "", fDir = dBuild, fContent = "") {
     }
 }
 
-function htmlLinkage(fName = "") {
-    const fPath = path.join(dApp, "page", fName);
-    let domIndex, domPage;
-
-    try {
-        domIndex = new JSDOM(fs.readFileSync(path.join(dApp, "base.html"), { encoding }));
-        domPage = new JSDOM(fs.readFileSync(fPath, { encoding }));
-    }
-    catch (error) {
-        console.error(error);
-        return false;
-    }
-
-    const docIndex = domIndex.window.document, docPage = domPage.window.document;
-
-    const links = docIndex.querySelectorAll("[link]:not([link] [link])");
-    for (let elLink of links) carregarElemento(elLink);
-
-    function carregarElemento(elIndex = new Element()) {
-        if (!elIndex) return;
-        if (elIndex.getAttribute("link-processed") === "true") return;
-        elIndex.setAttribute("link-processed", "true");
-
-        const nm = elIndex.getAttribute("link");
-        if (!nm) return;
-        const elPage = docPage.querySelector(nm);
-        if (elPage == null) return;
-
-        const ic = elPage.hasAttribute("link-remove") ? elPage.getAttribute("link-remove") : elIndex.getAttribute("link-remove");
-        if (ic === 'true') {
-            elIndex.remove();
-            elPage.remove();
-            return;
-        }
-
-        let childs = elIndex.querySelectorAll("[link]");
-        childs.forEach(el => carregarElemento(el));
-
-        for (let i = 0; i < elPage.attributes.length; i++) {
-            const attribute = elPage.attributes[i];
-            elIndex.setAttribute(attribute.name, attribute.value);
-        }
-        elIndex.innerHTML = elIndex.innerHTML + elPage.innerHTML;
-        elPage.remove();
-    }
-
-    let strContent = domIndex.serialize();
-    strContent = strContent.replace(/FILENAME/g, fName.replace(".html", ""));
-    return fCreate(fName, dBuild, strContent);
+function normalizeName(inputString) {
+    const cleanedString = inputString.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    return cleanedString.replace(/[^\w\s]/gi, '');
 }
 
 function scssCompile(fName = "") {
@@ -89,8 +42,8 @@ function fCopyBuild(fName = "", fDir = dApp) {
 module.exports = {
     dApp,
     dBuild,
-    encoding,
+    normalizeName,
     fCopyBuild,
     scssCompile,
-    htmlLinkage
+    fCreate
 }

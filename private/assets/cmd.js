@@ -13,11 +13,6 @@ function ask(question = "") {
     });
 }
 
-function normalize(inputString) {
-    const cleanedString = inputString.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-    return cleanedString.replace(/[^\w\s]/gi, '');
-}
-
 async function confirm(question = "", includeCancel = false) {
     let Opts = includeCancel ? "(s/n/cancel) " : "(s/n) ";
     const asking = (await ask(question + Opts)).toString().toLowerCase().trim();
@@ -28,6 +23,5 @@ async function confirm(question = "", includeCancel = false) {
 
 module.exports = {
     ask,
-    normalize,
     confirm,
 }

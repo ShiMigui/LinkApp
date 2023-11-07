@@ -1,17 +1,20 @@
 const { join } = require("path");
 const fs = require("fs");
 const file = require("../assets/file");
-const { ask, confirm, normalize } = require("../assets/prj");
+const { ask, confirm } = require("../assets/cmd");
+const { encoding, spaceChar, lowerPageName } = require("../config.json");
 
 
 function createPage(pName = "") {
     try {
-        console.log(pName);
-        let content = fs.readFileSync(join(__dirname, "../template.html"), { encoding: file.encoding });
+        let content = fs.readFileSync(join(__dirname, "../template.html"), { encoding });
         content = content.replace(/PAGENAME/g, pName);
-        const fName = normalize(pName).replace(/ /g, "");
-        fs.writeFileSync(File("page", fName + ".html"), content, { encoding: file.encoding });
-        fs.writeFileSync(File("style", fName + ".scss"), "", {encoding: file.encoding});
+
+        let fName = file.normalizeName(pName).replace(/ /g, spaceChar);
+        if (lowerPageName) fName = fName.toLowerCase();
+
+        fs.writeFileSync(File("page", fName + ".html"), content, { encoding });
+        fs.writeFileSync(File("style", fName + ".scss"), "", { encoding });
 
         console.log(`Página '${pName}' criada.`);
     } catch (error) {
@@ -19,7 +22,7 @@ function createPage(pName = "") {
     }
 }
 
-function File(fFolder="", fName=""){
+function File(fFolder = "", fName = "") {
     return join(file.dApp, fFolder, fName);
 }
 
@@ -35,11 +38,11 @@ function File(fFolder="", fName=""){
             process.exit(1);
         }
         if (userPermission == 0) pName = await ask("Digite o nome da página: ");
-        else{
+        else {
             let fName = normalize(pName);
-            if(!fName){
+            if (!fName) {
                 console.error("Nome passado não é válido!");
-                userPermission=0;
+                userPermission = 0;
             }
         }
     }

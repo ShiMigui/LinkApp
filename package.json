@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "watch": "node private/dev/watch.js",
+    "build": "node private/dev/build.js",
     "new-page":"node private/dev/new-page.js"
   },
   "keywords": [],
