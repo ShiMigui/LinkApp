@@ -1,0 +1,17 @@
+{
+  "name": "linkapp",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "watch": "node private/dev/watch.js",
+    "new-page":"node private/dev/new-page.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "jsdom": "^22.1.0",
+    "sass": "^1.69.5"
+  }
+}
