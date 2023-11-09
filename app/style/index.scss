@@ -1,3 +1,15 @@
 *{
     box-sizing: border-box;
 }
+
+tab-list{
+    display: flex;
+    gap: 10px;
+    tab{
+        display: block;
+        padding: 10px;
+        &[selected=true]{
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    }
+}

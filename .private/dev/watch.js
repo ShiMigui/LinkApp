@@ -1,39 +1,47 @@
-require("../assets/build")();
+require("../assets/build")(true, true, true);
 const linkage = require("../assets/linkage");
 const scss = require("../assets/scss");
-const { watch } = require("fs");
 const arquivo = require("../arquivo");
+const dApp = arquivo.dApp;
+const fs = require('fs');
+const path = require('path');
 
-console.log("Watching...");
+function processFile(file) {
+    const filePath = path.join(dApp, file);
+    const relativePath = path.relative(dApp, filePath);
 
-const dPage = arquivo.dApp+"/page";
-const dStyle = arquivo.dApp+"/style";
-const dScript = arquivo.dApp+"/script";
-
-watch(dPage, (event, file)=>{
-    if (event !== 'change') return;
-    if (file.endsWith(".html")) {
-        let ic = linkage(file);
-        if (ic) console.log(`Compiled page: ${file}`);
+    // Ignora o arquivo base.html
+    if (file === 'base.html') {
+        require("../assets/build")(true);
+        return;
     }
-})
 
-watch(dStyle, (event, file)=>{
-    if (event !== 'change') return;
-    if (file.endsWith(".scss")) {
-        let ic = scss(file);
-        if (ic) console.log(`Compiled style: ${file}`);
-    }
-    else if (file.endsWith(".css")) {
-        let ic = arquivo.fCopy(`${dStyle}/${file}`, `${arquivo.dBuild}/style/${file}`);
-        if (ic) console.log(`Copied style: ${file}`);
-    }
-})
+    const extension = path.extname(file);
+    const fileName = path.basename(file);
 
-watch(dScript, (event, file)=>{
-    if (event !== 'change') return;
-    if (file.endsWith(".js")) {
-        let ic = arquivo.fCopy(`${dScript}/${file}`, `${arquivo.dBuild}/script/${file}`);
-        if (ic) console.log(`Copied script: ${file}`);
+    // Obtém o diretório do arquivo
+    const fileDirectory = path.dirname(file);
+
+    if (extension === '.html' && fileDirectory === 'page') {
+        // Se o arquivo for HTML na pasta "page", linkage
+        let ic = linkage(fileName);
+        if (ic) console.log(`Compiled page: ${filePath}`);
+    } else if (extension === '.scss' && fileDirectory === 'style') {
+        // Se o arquivo for SCSS na pasta "style", compilação
+        let ic = scss(fileName);
+        if (ic) console.log(`Compiled style: ${filePath}`);
+    } else {
+        // Para outros tipos de arquivos ou pastas diferentes, apenas copie
+        const destPath = path.join(arquivo.dBuild, relativePath);
+        let ic = arquivo.fCopy(filePath, destPath);
+        if (ic) console.log(`Copied: ${relativePath}`);
     }
-})
+}
+
+console.log('Observando mudanças em', dApp);
+
+fs.watch(dApp, { recursive: false }, (eventType, filename) => {
+    if (eventType === 'change') {
+        processFile(filename);
+    }
+});
