@@ -13,9 +13,9 @@
 ## Como utilizar
 
  Instale as dependências:
- ```npm install```
+ ``` npm install ```
  Rode o comando:
- ```npm run watch```
+ ``` npm run watch ```
 
 ## Atributos
 
@@ -28,12 +28,13 @@
 ## Elementos
 
  | Elemento | Parâmetros | Descrição |
+ | -------- | ---------- | --------- |
  | tab-list | *href* | Elemento lista de navegação de abas numa mesma página |
  | tab | *tab* | Aba de navegação numa mesma página, é gerado uma âncora "a" dentro deste elemento, parâmetro tab é o nome da aba a ser navegada |
 
 ## MIT License
 
-Copyright (c) [Ano] [Seu Nome]
+Copyright (c) 2023 [ShiMigui](https://github.com/ShiMigui) - Miguel Nascimento
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
