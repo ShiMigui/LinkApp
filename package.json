@@ -2,7 +2,6 @@
   "name": "linkapp",
   "version": "1.0.4",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "build": "node .link/dev/build.js",
     "watch": "node .link/dev/watch.js"
@@ -11,7 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fs": "^0.0.1-security",
     "jsdom": "^22.1.0",
+    "path": "^0.12.7",
     "sass": "^1.69.5"
   }
 }

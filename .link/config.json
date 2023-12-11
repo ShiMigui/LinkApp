@@ -1,4 +1,19 @@
 {
-    "encoding": "utf-8",
-    "ignore":["\\base.html", "\\style\\import"]
+    "root":{
+        "name": "root",
+        "tech": "html"
+    },
+    "techs": ["html", "php"],
+    "map":{
+        "global":{
+            "app": "app",
+            "build": "build"
+        },
+        "dev":{
+            "pages": ".",
+            "styles": "styles",
+            "scripts": "scripts"
+        }
+    },
+    "encoding": "utf-8"
 }
