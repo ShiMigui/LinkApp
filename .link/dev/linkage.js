@@ -64,7 +64,8 @@ module.exports = function (fName = "") {
         fs.writeFileSync(path.join(buildPages, fName), rDOM.serialize(), { encoding });
         console.log(`${fName} linkado`);
     }
-    catch{
+    catch (error) {
         console.error(`Não foi possível linkar ${fName}`);
+        console.error(error);
     }
 };

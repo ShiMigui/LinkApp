@@ -1,19 +1,25 @@
 {
-    "root":{
+    "root": {
         "name": "root",
         "tech": "html"
     },
-    "techs": ["html", "php"],
-    "map":{
-        "global":{
+    "techs": [
+        "html",
+        "php"
+    ],
+    "map": {
+        "global": {
             "app": "app",
             "build": "build"
         },
-        "dev":{
+        "dev": {
             "pages": ".",
             "styles": "styles",
             "scripts": "scripts"
         }
     },
-    "encoding": "utf-8"
+    "encoding": "utf-8",
+    "excludeFiles": [
+        "root.html"
+    ]
 }
